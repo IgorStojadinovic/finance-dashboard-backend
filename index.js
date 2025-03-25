@@ -16,7 +16,7 @@ app.use(express.json());
 const allowedOrigins = [
   "http://localhost:5173", // Vite development
   "http://localhost:4173", // Vite preview
-  "https://your-domain.com", // Production
+  "https://finance-dashboard-psi-sand.vercel.app/", // Production
 ];
 
 // Osnovna CORS konfiguracija
@@ -92,3 +92,5 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
+
+module.exports = app;

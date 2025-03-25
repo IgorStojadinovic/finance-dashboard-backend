@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(",") || [
-  "http://localhost:5173",
+  /*   "http://localhost:5173", */
   "https://finance-dashboard-psi-sand.vercel.app/",
 ];
 
