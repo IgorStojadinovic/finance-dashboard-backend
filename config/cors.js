@@ -5,6 +5,7 @@ dotenv.config();
 
 const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(",") || [
   "http://localhost:5173",
+  "https://finance-dashboard-psi-sand.vercel.app/",
 ];
 
 const corsOptions = {
