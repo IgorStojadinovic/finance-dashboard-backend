@@ -3,24 +3,22 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(",") || [
-  /*   "http://localhost:5173", */
-  "https://finance-dashboard-psi-sand.vercel.app/",
+const allowedOrigins = [
+  "https://finance-dashboard-psi-sand.vercel.app",
+  "http://localhost:5173", // za lokalni razvoj
 ];
 
 const corsOptions = {
   origin: function (origin, callback) {
-    // Allow requests without 'origin' header (e.g. mobile apps)
-    if (!origin) return callback(null, true);
-
-    if (allowedOrigins.indexOf(origin) === -1) {
-      return callback(new Error("CORS policy violation"), false);
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
     }
-    return callback(null, true);
   },
+  credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
   allowedHeaders: ["Content-Type", "Authorization"],
-  credentials: true,
 };
 
 export const corsMiddleware = cors(corsOptions);
