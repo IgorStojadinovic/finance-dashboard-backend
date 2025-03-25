@@ -16,20 +16,25 @@ app.use(express.json());
 const allowedOrigins = [
   "http://localhost:5173", // Vite development
   "http://localhost:4173", // Vite preview
-  "https://finance-dashboard-psi-sand.vercel.app/", // Production
+  "https://finance-dashboard-psi-sand.vercel.app", // Production - uklonjen slash sa kraja
+  "https://finance-dashboard-backend-rosy.vercel.app", // Dodajemo i backend URL
 ];
 
 // Osnovna CORS konfiguracija
 app.use(
   cors({
     origin: function (origin, callback) {
-      // Dozvoljavamo requests bez 'origin' headera (npr. mobilne aplikacije)
-      if (!origin) return callback(null, true);
-
-      if (allowedOrigins.indexOf(origin) === -1) {
-        return callback(new Error("CORS policy violation"), false);
+      // Tokom razvoja, dozvoljavamo sve origins
+      if (process.env.NODE_ENV === "development") {
+        return callback(null, true);
       }
-      return callback(null, true);
+
+      // U produkciji, proveravamo origin
+      if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
     },
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     allowedHeaders: ["Content-Type", "Authorization"],
