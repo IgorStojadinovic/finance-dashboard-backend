@@ -42,7 +42,7 @@ npm install
 3. Create a `.env` file in the root directory with the following variables:
 
 ```env
-DATABASE_URL="you-db-url"
+DATABASE_URL="your-db-url"
 JWT_SECRET="your-jwt-secret"
 PORT=3000
 ```
