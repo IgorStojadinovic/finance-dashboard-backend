@@ -1,125 +1,160 @@
-const User = require("../models/User");
+const prisma = require("../lib/prisma");
 const bcrypt = require("bcrypt");
 
-// @desc Get all users
-// @route GET /users
-// @access Private
-const getAllUsers = async (req, res) => {
-    const users = await User.find().select("-password").lean();
+const usersController = {
+  // Create new user
+  async createUser(req, res) {
+    try {
+      const { name, email, password } = req.body;
 
-    if (!users?.length) {
-        return res.status(400).json({message: "No users found"});
+      // Check if user already exists
+      const existingUser = await prisma.user.findUnique({
+        where: { email },
+      });
+
+      if (existingUser) {
+        return res
+          .status(400)
+          .json({ error: "User with this email already exists" });
+      }
+
+      // Hash password
+      const hashedPassword = await bcrypt.hash(password, 10);
+
+      // Create user
+      const user = await prisma.user.create({
+        data: {
+          name,
+          email,
+          password: hashedPassword,
+        },
+      });
+
+      // Remove password from response
+      const { password: _, ...userWithoutPassword } = user;
+      res.status(201).json(userWithoutPassword);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
     }
-    res.json(users);
+  },
+
+  // Get all users
+  async getAllUsers(req, res) {
+    try {
+      const users = await prisma.user.findMany({
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          transactions: true,
+          recurringBills: true,
+          budgets: true,
+          pots: true,
+        },
+      });
+      res.json(users);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  },
+
+  // Get one user by ID
+  async getUserById(req, res) {
+    try {
+      const user = await prisma.user.findUnique({
+        where: { id: parseInt(req.params.id) },
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          transactions: true,
+          recurringBills: true,
+          budgets: true,
+          pots: true,
+        },
+      });
+
+      if (!user) {
+        return res.status(404).json({ error: "User not found" });
+      }
+
+      res.json(user);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  },
+
+  // Update user
+  async updateUser(req, res) {
+    try {
+      const { name, email, password } = req.body;
+      const updateData = { name, email };
+
+      // If password is changed, hash it
+      if (password) {
+        updateData.password = await bcrypt.hash(password, 10);
+      }
+
+      const user = await prisma.user.update({
+        where: { id: parseInt(req.params.id) },
+        data: updateData,
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          transactions: true,
+          recurringBills: true,
+          budgets: true,
+          pots: true,
+        },
+      });
+
+      res.json(user);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  },
+
+  // Delete user
+  async deleteUser(req, res) {
+    try {
+      await prisma.user.delete({
+        where: { id: parseInt(req.params.id) },
+      });
+      res.json({ message: "User deleted successfully" });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  },
+
+  // Login user
+  async login(req, res) {
+    try {
+      const { email, password } = req.body;
+
+      // Find user
+      const user = await prisma.user.findUnique({
+        where: { email },
+      });
+
+      if (!user) {
+        return res.status(401).json({ error: "Invalid credentials" });
+      }
+
+      // Check password
+      const validPassword = await bcrypt.compare(password, user.password);
+
+      if (!validPassword) {
+        return res.status(401).json({ error: "Invalid credentials" });
+      }
+
+      // Remove password from response
+      const { password: _, ...userWithoutPassword } = user;
+      res.json(userWithoutPassword);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  },
 };
 
-// @desc Create new user
-// @route POST /users
-// @access Private
-const createNewUser = async (req, res) => {
-    const {username, password, roles} = req.body;
-
-    // Confirm data
-    if (!username || !password) {
-        return res.status(400).json({message: "All fields are required"});
-    }
-
-    // Check for duplicate
-    const duplicateUser = await User.findOne({username}).collation({locale: "en", strength: 2}).lean().exec();
-
-    if (duplicateUser) {
-        return res.status(409).json({message: "Username already taken."});
-    }
-
-    // Hash password
-    const hashedPwd = await bcrypt.hash(password, 10); // salt rounds
-
-    const userObject = (!Array.isArray(roles) || !roles.length)
-        ? {username, "password": hashedPwd}
-        : {username, "password": hashedPwd, roles};
-
-    // Create and store new user
-    const user = await User.create(userObject);
-
-    if (user) {
-        res.status(201).json({message: `New user ${username} created`});
-    } else {
-        res.status(400).json({message: "Invalid user data recived"});
-    }
-};
-
-// @desc Update a user
-// @route PATCH /users
-// @access Private
-const updateUser = async (req, res) => {
-    const {id, username, roles, active, password} = req.body;
-
-    // Confirm data
-    if (
-        !id ||
-        !username ||
-        !Array.isArray(roles) ||
-        !roles.length ||
-        typeof active !== "boolean"
-    ) {
-        return res.status(400).json({message: "All fileds are required"});
-    }
-
-    const user = await User.findById(id).exec();
-
-    if (!user) {
-        return res.status(400).json({message: "User not found"});
-    }
-
-    // Check for duplicate
-    const duplicate = await User.findOne({username}).collation({locale: "en", strength: 2}).lean().exec();
-    // Allow updates to the original user
-
-    if (duplicate && duplicate?._id.toString() !== id) {
-        return res.status(409).json({message: "Duplicate username"});
-    }
-
-    user.username = username;
-    user.roles = roles;
-    user.active = active;
-
-    if (password) {
-        // Hash password
-        user.password = await bcrypt.hash(password, 10);
-    }
-
-    const updatedUser = await user.save();
-    res.json({message: `${updatedUser.username} updated`});
-};
-
-// @desc Delete a user
-// @route DELETE /users
-// @access Private
-const deleteUser = async (req, res) => {
-    const {id} = req.body;
-
-    if (!id) {
-        return res.status(400).json({message: "User ID required"});
-    }
-
-    const userExists = await User.findById(id).exec();
-
-    if (!userExists) {
-        return res.status(400).json({message: "User not found"});
-    }
-
-    const {username} = userExists;
-
-    const result = await User.findOneAndDelete({_id: id});
-
-    const reply = `Username ${user.username} with ID ${result._id} deleted`;
-
-    res.json(reply);
-};
-
-module.exports = {
-    getAllUsers,
-    createNewUser,
-    updateUser,
-    deleteUser
-};
+module.exports = usersController;
