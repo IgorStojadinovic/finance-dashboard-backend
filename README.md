@@ -1,23 +1,36 @@
 # Finance Dashboard Backend
 
-Backend service for the Finance Dashboard application, built with Node.js, Express.js framework, and Prisma ORM.
+Backend service for the Finance Dashboard application, providing robust API endpoints and database management.
 
-## Technologies
+## Tech Stack
 
-- Node.js
-- Express.js
-- Prisma (ORM)
-- PostgreSQL
-- JWT for authentication
-- bcrypt for password hashing
+![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
+![Express.js](https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white)
+![Prisma](https://img.shields.io/badge/Prisma-2D3748?style=for-the-badge&logo=prisma&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
+![JWT](https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=JSON%20web%20tokens&logoColor=white)
+![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
 
-## Prerequisites
+## Features
+
+- 🔐 JWT Authentication
+- 🔄 CRUD Operations
+- 📊 Data Validation
+- 🗄️ PostgreSQL Database
+- 🔌 RESTful API
+- 🛡️ CORS Protection
+- 🔒 Password Hashing
+- 📝 Database Migrations
+
+## Getting Started
+
+### Prerequisites
 
 - Node.js (v14 or newer)
 - PostgreSQL database
 - npm or yarn
 
-## Installation
+### Installation
 
 1. Clone the repository
 2. Install dependencies:
@@ -29,7 +42,7 @@ npm install
 3. Create a `.env` file in the root directory with the following variables:
 
 ```env
-DATABASE_URL="postgresql://username:password@localhost:5432/finance_dashboard"
+DATABASE_URL="you-db-url"
 JWT_SECRET="your-jwt-secret"
 PORT=3000
 ```
@@ -182,3 +195,43 @@ npm run dev
 ## Database
 
 The project uses PostgreSQL database with Prisma ORM. The schema can be found in `prisma/schema.prisma`.
+
+## Project Structure
+
+```
+backend/
+├── prisma/         # Database schema and migrations
+├── routes/         # API routes
+├── controllers/    # Route controllers
+├── middleware/     # Custom middleware
+├── lib/            # Utilities and configurations
+└── views/          # Static views (404, etc.)
+```
+
+## Available Scripts
+
+- `npm run dev` - Start development server
+- `npm run start` - Start production server
+- `npx prisma migrate dev` - Run database migrations
+- `npx prisma db seed` - Seed the database
+- `npx prisma studio` - Open Prisma Studio
+
+## Security Features
+
+- Password hashing with bcrypt
+- JWT token authentication
+- CORS protection
+- Request validation
+- Error handling middleware
+- 15-minute token expiration
+
+## Deployment
+
+The API is deployed on Vercel with automatic deployments on push to main branch.
+
+## Environment Variables
+
+- `DATABASE_URL` - PostgreSQL connection string
+- `JWT_SECRET` - Secret key for JWT tokens
+- `PORT` - Server port (default: 3000)
+
