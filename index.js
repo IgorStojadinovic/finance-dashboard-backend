@@ -15,6 +15,7 @@ app.use(express.json());
 
 const allowedOrigins = [
   "http://localhost:5174", // Vite development
+  "http://localhost:5173", // Vite development
   "http://localhost:4174", // Vite preview
   "https://finance-dashboard-psi-sand.vercel.app", // Production - uklonjen slash sa kraja
   "https://finance-dashboard-backend-rosy.vercel.app", // Dodajemo i backend URL
