@@ -8,6 +8,7 @@ const allowedOrigins = [
   "http://localhost:5174", // za lokalni razvoj
   "http://localhost:4174", // za lokalni razvoj
   "http://localhost:5173", // za lokalni razvoj
+  "http://localhost:4173", // za lokalni razvoj
 ];
 
 const corsOptions = {
