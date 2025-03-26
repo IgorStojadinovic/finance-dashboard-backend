@@ -155,4 +155,8 @@ router.post("/change-password", async (req, res) => {
   }
 });
 
+router.post("/logout", (req, res) => {
+
+  res.json({ success: true, message: "Logged out successfully" });
+});
 module.exports = router;
