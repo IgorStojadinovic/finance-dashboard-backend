@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const allowedOrigins = [
-    "https://finance-dashboard-psi-sand.vercel.app/",
+    "https://finance-dashboard-psi-sand.vercel.app",
     "http://localhost:5174", // za lokalni razvoj
     "http://localhost:4174", // za lokalni razvoj
     "http://localhost:5173", // za lokalni razvoj
