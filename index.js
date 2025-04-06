@@ -18,7 +18,7 @@ const allowedOrigins = [
     "http://localhost:5173", // Vite development
     "http://localhost:4174", // Vite preview
     "http://localhost:4173", // Vite preview
-    "https://finance-dashboard-psi-sand.vercel.app", // Production
+    "https://finance-dashboard-psi-sand.vercel.app/", // Production
 ];
 
 // Osnovna CORS konfiguracija
