@@ -67,22 +67,10 @@ app.use("/api/recurring-bills", recurringBillsRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/", require("./routes/root"));
 
-// Specifična CORS konfiguracija za određenu rutu
-app.get(
-    "/api/special-route",
-    cors({
-        origin: "http://special-domain.com",
-    }),
-    (req, res) => {
-        // Route handler
-    }
-);
+
 
 // Rukovanje preflight requests-ima
 app.options("*", cors());
-
-// ILI za specifičnu rutu
-app.options("/api/special-route", cors());
 
 // 404 handler
 app.all("*", (req, res) => {
