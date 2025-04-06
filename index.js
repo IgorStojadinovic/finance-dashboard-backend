@@ -18,9 +18,7 @@ const allowedOrigins = [
     "http://localhost:5173", // Vite development
     "http://localhost:4174", // Vite preview
     "http://localhost:4173", // Vite preview
-    "https://finance-dashboard-psi-sand.vercel.app", // Production - uklonjen slash sa kraja
-    "https://finance-dashboard-backend-rosy.vercel.app",
-    "https://finance-dashboard-backend-s-api.vercel.app",
+    "https://finance-dashboard-psi-sand.vercel.app", // Production
 ];
 
 // Osnovna CORS konfiguracija
@@ -67,7 +65,7 @@ app.use("/api/recurring-bills", recurringBillsRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/", require("./routes/root"));
 
-// Specifična CORS konfiguracija za određenu rutu
+/* // Specifična CORS konfiguracija za određenu rutu
 app.get(
     "/api/special-route",
     cors({
@@ -76,13 +74,13 @@ app.get(
     (req, res) => {
         // Route handler
     }
-);
+); */
 
 // Rukovanje preflight requests-ima
 app.options("*", cors());
 
 // ILI za specifičnu rutu
-app.options("/api/special-route", cors());
+//app.options("/api/special-route", cors());
 
 // 404 handler
 app.all("*", (req, res) => {
