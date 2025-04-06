@@ -24,7 +24,7 @@ const allowedOrigins = [
 ];
 
 // Osnovna CORS konfiguracija
-/* app.use(
+app.use(
     cors({
         origin: function (origin, callback) {
             // Tokom razvoja, dozvoljavamo sve origins
@@ -43,7 +43,7 @@ const allowedOrigins = [
         allowedHeaders: ["Content-Type", "Authorization"],
         credentials: true,
     })
-); */
+);
 
 // Testiranje konekcije sa bazom
 async function testConnection() {
@@ -67,7 +67,7 @@ app.use("/api/recurring-bills", recurringBillsRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/", require("./routes/root"));
 
-/* // Specifična CORS konfiguracija za određenu rutu
+// Specifična CORS konfiguracija za određenu rutu
 app.get(
     "/api/special-route",
     cors({
@@ -76,13 +76,13 @@ app.get(
     (req, res) => {
         // Route handler
     }
-); */
+);
 
 // Rukovanje preflight requests-ima
-//app.options("*", cors());
+app.options("*", cors());
 
 // ILI za specifičnu rutu
-//app.options("/api/special-route", cors());
+app.options("/api/special-route", cors());
 
 // 404 handler
 app.all("*", (req, res) => {
