@@ -43,8 +43,8 @@ model RecurringBill {
   userId    String
   user      User     @relation(fields: [userId], references: [id])
   name      String
-  amount    String
-  orderDate String
+  amount    Float
+  orderDate DateTime
   status    String
   date      DateTime
 }

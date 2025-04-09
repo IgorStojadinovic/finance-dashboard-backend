@@ -29,8 +29,8 @@ CREATE TABLE "RecurringBill" (
     "id" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
     "name" TEXT NOT NULL,
-    "amount" TEXT NOT NULL,
-    "orderDate" TEXT NOT NULL,
+    "amount" DOUBLE PRECISION NOT NULL,
+    "orderDate" TIMESTAMP(3) NOT NULL,
     "status" TEXT NOT NULL,
     "date" TIMESTAMP(3) NOT NULL,
 
