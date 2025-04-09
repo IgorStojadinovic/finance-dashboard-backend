@@ -46,6 +46,7 @@ const usersController = {
           id: true,
           name: true,
           email: true,
+          password: true,
           transactions: true,
           recurringBills: true,
           budgets: true,
@@ -62,7 +63,7 @@ const usersController = {
   async getUserById(req, res) {
     try {
       const user = await prisma.user.findUnique({
-        where: { id: parseInt(req.params.id) },
+        where: { id: req.params.id },
         select: {
           id: true,
           name: true,
