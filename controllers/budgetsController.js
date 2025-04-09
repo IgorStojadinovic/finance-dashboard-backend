@@ -56,7 +56,7 @@ const budgetsController = {
     try {
       const { userId } = req.params;
       const budgets = await prisma.budget.findMany({
-        where: { userId: parseInt(userId) },
+        where: { userId: userId },
         orderBy: { id: "desc" },
       });
       res.json(budgets);
@@ -69,7 +69,7 @@ const budgetsController = {
   async getBudgetById(req, res) {
     try {
       const budget = await prisma.budget.findUnique({
-        where: { id: parseInt(req.params.id) },
+        where: { id: req.params.id },
         include: {
           user: {
             select: {
@@ -96,7 +96,7 @@ const budgetsController = {
     try {
       const { category, maximum, theme } = req.body;
       const budget = await prisma.budget.update({
-        where: { id: parseInt(req.params.id) },
+        where: { id: req.params.id },
         data: {
           category,
           maximum,
@@ -114,7 +114,7 @@ const budgetsController = {
   async deleteBudget(req, res) {
     try {
       await prisma.budget.delete({
-        where: { id: parseInt(req.params.id) },
+        where: { id: req.params.id },
       });
       res.json({ message: "Budget deleted successfully" });
     } catch (error) {
@@ -128,7 +128,7 @@ const budgetsController = {
       const { userId, category } = req.params;
       const budget = await prisma.budget.findFirst({
         where: {
-          userId: parseInt(userId),
+          userId: userId,
           category: category,
         },
       });
