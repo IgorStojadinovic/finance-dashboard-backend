@@ -4,7 +4,7 @@ const recurringBillsController = {
   // Create new recurring bill
   async createRecurringBill(req, res) {
     try {
-      const { userId, name, amount, orderDate, status, date } = req.body;
+      const { userId, name, amount, status } = req.body;
 
       // Check if user exists
       const user = await prisma.user.findUnique({
@@ -20,9 +20,9 @@ const recurringBillsController = {
           userId,
           name,
           amount,
-          orderDate,
+          orderDate: new Date(),
           status,
-          date,
+          date: new Date(),
         },
       });
 
@@ -58,7 +58,7 @@ const recurringBillsController = {
     try {
       const { userId } = req.params;
       const recurringBills = await prisma.recurringBill.findMany({
-        where: { userId: parseInt(userId) },
+        where: { userId: userId },
         orderBy: { date: "desc" },
       });
       res.json(recurringBills);
@@ -71,7 +71,7 @@ const recurringBillsController = {
   async getRecurringBillById(req, res) {
     try {
       const recurringBill = await prisma.recurringBill.findUnique({
-        where: { id: parseInt(req.params.id) },
+        where: { id: req.params.id },
         include: {
           user: {
             select: {
@@ -98,7 +98,7 @@ const recurringBillsController = {
     try {
       const { name, amount, orderDate, status, date } = req.body;
       const recurringBill = await prisma.recurringBill.update({
-        where: { id: parseInt(req.params.id) },
+        where: { id: req.params.id },
         data: {
           name,
           amount,
@@ -118,7 +118,7 @@ const recurringBillsController = {
   async deleteRecurringBill(req, res) {
     try {
       await prisma.recurringBill.delete({
-        where: { id: parseInt(req.params.id) },
+        where: { id: req.params.id },
       });
       res.json({ message: "Recurring bill deleted successfully" });
     } catch (error) {
@@ -132,7 +132,7 @@ const recurringBillsController = {
       const { userId, status } = req.params;
       const recurringBills = await prisma.recurringBill.findMany({
         where: {
-          userId: parseInt(userId),
+          userId: userId,
           status: status,
         },
         orderBy: { date: "desc" },
@@ -153,7 +153,7 @@ const recurringBillsController = {
 
       const recurringBills = await prisma.recurringBill.findMany({
         where: {
-          userId: parseInt(userId),
+          userId: userId,
           date: {
             gte: startDate,
             lte: endDate,
