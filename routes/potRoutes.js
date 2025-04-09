@@ -4,6 +4,7 @@ const potsController = require("../controllers/potsController");
 
 // All routes for pots
 router.post("/", potsController.createPot);
+router.get("/all", potsController.getAllPots);
 router.get("/user/:userId", potsController.getUserPots);
 router.get("/:id", potsController.getPotById);
 router.put("/:id", potsController.updatePot);
