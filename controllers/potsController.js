@@ -57,7 +57,7 @@ const potsController = {
     try {
       const { userId } = req.params;
       const pots = await prisma.pot.findMany({
-        where: { userId: parseInt(userId) },
+        where: { userId: userId },
         orderBy: { id: "desc" },
       });
       res.json(pots);
@@ -70,7 +70,7 @@ const potsController = {
   async getPotById(req, res) {
     try {
       const pot = await prisma.pot.findUnique({
-        where: { id: parseInt(req.params.id) },
+        where: { id: req.params.id },
       });
 
       if (!pot) {
@@ -88,7 +88,7 @@ const potsController = {
     try {
       const { name, target, total, theme } = req.body;
       const pot = await prisma.pot.update({
-        where: { id: parseInt(req.params.id) },
+        where: { id: req.params.id },
         data: {
           name,
           target,
@@ -107,7 +107,7 @@ const potsController = {
   async deletePot(req, res) {
     try {
       await prisma.pot.delete({
-        where: { id: parseInt(req.params.id) },
+        where: { id: req.params.id },
       });
       res.json({ message: "Pot deleted successfully" });
     } catch (error) {
@@ -120,7 +120,7 @@ const potsController = {
     try {
       const { amount } = req.body;
       const pot = await prisma.pot.findUnique({
-        where: { id: parseInt(req.params.id) },
+        where: { id: req.params.id },
       });
 
       if (!pot) {
