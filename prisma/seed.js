@@ -61,10 +61,10 @@ async function main() {
     // Dodaj potove za TestUser
     await prisma.pot.createMany({
         data: [
-            { userId: user2.id, name: "Vacation Fund", target: 2000.0, total: 500.0, theme: "Travel" },
-            { userId: user2.id, name: "Emergency Fund", target: 5000.0, total: 1500.0, theme: "Safety" },
-            { userId: user2.id, name: "New Car", target: 15000.0, total: 3000.0, theme: "Automobile" },
-            { userId: user2.id, name: "Home Renovation", target: 10000.0, total: 2500.0, theme: "Home" },
+            { userId: user2.id, name: "Vacation Fund", target: 2000.0, total: 500.0, hex: "#277C78", theme: "green" },
+            { userId: user2.id, name: "Emergency Fund", target: 5000.0, total: 1500.0, hex: "#626070", theme: "navy" },
+            { userId: user2.id, name: "New Car", target: 15000.0, total: 3000.0, hex: "#3F82B2", theme: "blue" },
+            { userId: user2.id, name: "Home Renovation", target: 10000.0, total: 2500.0, hex: "#F2CDAC", theme: "yellow" },
         ],
     });
 
