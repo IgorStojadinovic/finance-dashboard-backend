@@ -1,11 +1,12 @@
 const { PrismaClient } = require("@prisma/client");
 const bcrypt = require("bcrypt");
+const adminPassword = process.env.ADMIN_PASSWORD;
 
 const prisma = new PrismaClient();
 
 async function main() {
     // Prvo kreiraj korisnika bez relacija
-    const password1 = await bcrypt.hash("admin", 10);
+    const password1 = await bcrypt.hash(adminPassword, 10);
     const user1 = await prisma.user.create({
         data: {
             name: "Admin",
