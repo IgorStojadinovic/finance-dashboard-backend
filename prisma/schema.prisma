@@ -22,8 +22,18 @@ model User {
   pots           Pot[]
   budgets        Budget[]
   recurringBills RecurringBill[]
+  balance        Balance[]
   createdAt      DateTime        @default(now())
   updatedAt      DateTime        @updatedAt
+}
+
+model Balance {
+  id       String @id @default(uuid())
+  userId   String
+  user     User   @relation(fields: [userId], references: [id])
+  balance  Float
+  income   Float
+  expenses Float
 }
 
 model Transaction {
@@ -36,6 +46,7 @@ model Transaction {
   category  String
   recurring Boolean
   status    String
+  image     String
 }
 
 model RecurringBill {
@@ -46,25 +57,32 @@ model RecurringBill {
   amount    Float
   orderDate DateTime
   status    String
+  category  String
   date      DateTime
+  color     String
 }
 
 model Budget {
-  id       String @id @default(uuid())
-  userId   String
-  user     User   @relation(fields: [userId], references: [id])
-  category String
-  maximum  Float
-  theme    String
+  id              String @id @default(uuid())
+  userId          String
+  user            User   @relation(fields: [userId], references: [id])
+  category        String
+  spent           Float
+  spending_limit  Float
+  theme           String
+  hex             String
+  progressBar     String
+  latest_spending Json[]
 }
 
 model Pot {
-  id     String @id @default(uuid())
-  userId String
-  user   User   @relation(fields: [userId], references: [id])
-  name   String
-  target Float
-  total  Float
-  hex    String
-  theme  String
+  id          String @id @default(uuid())
+  userId      String
+  user        User   @relation(fields: [userId], references: [id])
+  name        String
+  target      Float
+  total       Float
+  hex         String
+  theme       String
+  progressBar String @default("0%")
 }

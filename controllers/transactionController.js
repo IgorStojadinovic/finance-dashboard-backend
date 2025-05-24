@@ -97,6 +97,31 @@ const transactionController = {
             res.status(500).json({ error: error.message });
         }
     },
+
+    // Get transactions by user ID
+    async getTransactionsByUserId(req, res) {
+        try {
+            const transactions = await prisma.transaction.findMany({
+                where: { userId: req.params.userId },
+            }); 
+            res.json(transactions);
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    },
+
+    // Sort by category name
+    async sortByCategory(req, res) {
+        try {
+            const { category } = req.params;
+            const transactions = await prisma.transaction.findMany({
+                where: { category: category },
+            });
+            res.json(transactions);
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    }
 };
 
 module.exports = transactionController;

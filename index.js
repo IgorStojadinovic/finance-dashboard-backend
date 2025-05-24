@@ -20,7 +20,7 @@ const allowedOrigins = [
     "http://localhost:4173", // Vite preview
     "https://finance-dashboard-psi-sand.vercel.app/",
     "https://finance-dashboard-psi-sand.vercel.app",
-    "https://finance-dashboard-psi-sand.vercel.app/api"
+    "https://finance-dashboard-psi-sand.vercel.app/api",
 ];
 
 // Osnovna CORS konfiguracija
@@ -57,7 +57,7 @@ async function testConnection() {
 }
 
 testConnection();
-
+app.use(express.static(path.join(__dirname, "public")));
 // Rute
 app.use("/api/transactions", transactionRoutes);
 app.use("/api/users", userRoutes);
@@ -66,8 +66,6 @@ app.use("/api/budgets", budgetRoutes);
 app.use("/api/recurring-bills", recurringBillsRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/", require("./routes/root"));
-
-
 
 // Rukovanje preflight requests-ima
 app.options("*", cors());
