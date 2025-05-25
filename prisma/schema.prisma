@@ -73,6 +73,7 @@ model Budget {
   hex             String
   progressBar     String
   latest_spending Json[]
+  createdAt       DateTime @default(now())
 }
 
 model Pot {
