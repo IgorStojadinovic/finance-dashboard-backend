@@ -4,7 +4,7 @@ const potsController = {
     // Create new pot (savings)
     async createPot(req, res) {
         try {
-            const { userId, name, target, total, theme } = req.body;
+            const { userId, name, target, total, theme, hex } = req.body;
 
             // Check if user exists
             const user = await prisma.user.findUnique({
@@ -15,19 +15,25 @@ const potsController = {
                 return res.status(404).json({ error: "User not found" });
             }
 
-            const pot = await prisma.pot.create({
+            const progressBar = target === 0 ? "0%" : `${Math.min(100, Math.round((total / target) * 100))}%`;
+
+            const potData = {
                 data: {
                     userId,
                     name,
                     target,
                     total,
                     theme,
-                    progressBar: `${Math.min(100, Math.round((target / total) * 100))}%`,
+                    progressBar,
+                    hex,
                 },
-            });
+            };
+            
+            const pot = await prisma.pot.create(potData);
 
             res.status(201).json(pot);
         } catch (error) {
+            console.error("Error creating pot:", error);
             res.status(500).json({ error: error.message });
         }
     },
