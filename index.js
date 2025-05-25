@@ -23,16 +23,16 @@ const allowedOrigins = [
     "https://finance-dashboard-psi-sand.vercel.app/api",
 ];
 
-// Osnovna CORS konfiguracija
+// Basic CORS configuration
 app.use(
     cors({
         origin: function (origin, callback) {
-            // Tokom razvoja, dozvoljavamo sve origins
+            // During development, allow all origins
             if (process.env.NODE_ENV === "development") {
                 return callback(null, true);
             }
 
-            // U produkciji, proveravamo origin
+            // In production, check origin
             if (!origin || allowedOrigins.indexOf(origin) !== -1) {
                 callback(null, true);
             } else {
@@ -45,7 +45,7 @@ app.use(
     })
 );
 
-// Testiranje konekcije sa bazom
+// Test connection to database
 async function testConnection() {
     try {
         await prisma.$queryRaw`SELECT 1`;
@@ -67,7 +67,7 @@ app.use("/api/recurring-bills", recurringBillsRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/", require("./routes/root"));
 
-// Rukovanje preflight requests-ima
+// Preflight requests
 app.options("*", cors());
 
 // 404 handler
