@@ -49,7 +49,7 @@ const budgetsController = {
                         },
                     },
                 },
-                orderBy: { id: "desc" },
+                orderBy: { createdAt: "desc" },
             });
             res.json(budgets);
         } catch (error) {
@@ -63,7 +63,7 @@ const budgetsController = {
             const { userId } = req.params;
             const budgets = await prisma.budget.findMany({
                 where: { userId: userId },
-                orderBy: { id: "desc" },
+                orderBy: { createdAt: "desc" },
             });
             res.json(budgets);
         } catch (error) {
