@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const path = require("path");
 const prisma = require("./lib/prisma");
@@ -14,49 +15,33 @@ const app = express();
 app.use(express.json());
 
 const allowedOrigins = [
-    "http://localhost:5174", // Vite development
-    "http://localhost:5173", // Vite development
-    "http://localhost:4174", // Vite preview
-    "http://localhost:4173", // Vite preview
-    "https://finance-dashboard-psi-sand.vercel.app/",
-    "https://finance-dashboard-psi-sand.vercel.app",
-    "https://finance-dashboard-psi-sand.vercel.app/api",
+  "http://localhost:5173", // Vite development
+  "https://finance-dashboard-psi-sand.vercel.app",
+  "https://finance-dashboard-psi-sand.vercel.app/api",
 ];
 
 // Basic CORS configuration
 app.use(
-    cors({
-        origin: function (origin, callback) {
-            // During development, allow all origins
-            if (process.env.NODE_ENV === "development") {
-                return callback(null, true);
-            }
+  cors({
+    origin: function (origin, callback) {
+      // During development, allow all origins
+      if (process.env.NODE_ENV === "development") {
+        return callback(null, true);
+      }
 
-            // In production, check origin
-            if (!origin || allowedOrigins.indexOf(origin) !== -1) {
-                callback(null, true);
-            } else {
-                callback(new Error("Not allowed by CORS"));
-            }
-        },
-        methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
-        allowedHeaders: ["Content-Type", "Authorization"],
-        credentials: true,
-    })
+      // In production, check origin
+      if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+  }),
 );
 
-// Test connection to database
-async function testConnection() {
-    try {
-        await prisma.$queryRaw`SELECT 1`;
-        console.log("Database connection successful");
-    } catch (error) {
-        console.error("Database connection failed:", error);
-        process.exit(1);
-    }
-}
-
-testConnection();
 app.use(express.static(path.join(__dirname, "public")));
 // Rute
 app.use("/api/transactions", transactionRoutes);
@@ -72,19 +57,19 @@ app.options("*", cors());
 
 // 404 handler
 app.all("*", (req, res) => {
-    res.status(404);
-    if (req.accepts("html")) {
-        res.sendFile(path.join(__dirname, "views", "404.html"));
-    } else if (req.accepts("json")) {
-        res.json({ message: "404 Not Found" });
-    } else {
-        res.type("text").send("404 Not Found");
-    }
+  res.status(404);
+  if (req.accepts("html")) {
+    res.sendFile(path.join(__dirname, "views", "404.html"));
+  } else if (req.accepts("json")) {
+    res.json({ message: "404 Not Found" });
+  } else {
+    res.type("text").send("404 Not Found");
+  }
 });
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+  console.log(`Server is running on port ${PORT}`);
 });
 
 module.exports = app;

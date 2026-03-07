@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const prisma = require("../lib/prisma");
 
@@ -156,7 +156,6 @@ router.post("/change-password", async (req, res) => {
 });
 
 router.post("/logout", (req, res) => {
-
   res.json({ success: true, message: "Logged out successfully" });
 });
 module.exports = router;
