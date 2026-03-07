@@ -1,11 +1,21 @@
+require("dotenv").config();
 const { PrismaClient } = require("@prisma/client");
+const { withAccelerate } = require("@prisma/extension-accelerate");
 const bcrypt = require("bcryptjs");
 const adminPassword = process.env.ADMIN_PASSWORD;
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient({
+  accelerateUrl: process.env.DATABASE_URL,
+}).$extends(withAccelerate());
 
 async function main() {
-  // Prvo kreiraj korisnika bez relacija
+  await prisma.transaction.deleteMany();
+  await prisma.recurringBill.deleteMany();
+  await prisma.budget.deleteMany();
+  await prisma.pot.deleteMany();
+  await prisma.balance.deleteMany();
+  await prisma.user.deleteMany();
+
   const password1 = await bcrypt.hash(adminPassword, 10);
   const user1 = await prisma.user.create({
     data: {
@@ -15,17 +25,15 @@ async function main() {
     },
   });
 
-  // Kreiraj TestUser korisnika
-  const password2 = await bcrypt.hash("JohnDoe84266+", 10);
+  const password2 = await bcrypt.hash("exampleuser84266+", 10);
   const user2 = await prisma.user.create({
     data: {
-      name: "TestUser",
-      email: "Testuser@gmail.com",
+      name: "example user",
+      email: "exampleuser@example.com",
       password: password2,
     },
   });
 
-  // Dodaj transakcije za TestUser
   await prisma.transaction.createMany({
     data: [
       {
@@ -252,7 +260,6 @@ async function main() {
     ],
   });
 
-  // Dodaj potove za TestUser
   await prisma.pot.createMany({
     data: [
       {
@@ -294,7 +301,6 @@ async function main() {
     ],
   });
 
-  // Dodaj budžete za TestUser
   await prisma.budget.createMany({
     data: [
       {
@@ -472,7 +478,6 @@ async function main() {
     ],
   });
 
-  // Dodaj ponavljajuće račune za TestUser
   await prisma.recurringBill.createMany({
     data: [
       {
@@ -548,7 +553,6 @@ async function main() {
   `;
 
   const totalExpenses = result[0]?.total_expenses || 0;
-  // Dodaj balance za TestUser
   await prisma.balance.create({
     data: {
       userId: user2.id,
