@@ -17,7 +17,7 @@ app.use(express.json());
 const allowedOrigins = [
   "http://localhost:5173", // Vite development
   "https://finance-dashboard-psi-sand.vercel.app",
-  "https://finance-dashboard-psi-sand.vercel.app/api",
+  "https://finance-dashboard-n7ab.onrender.com",
 ];
 
 // Basic CORS configuration
