@@ -63,9 +63,9 @@ model RecurringBill {
 }
 
 model Budget {
-  id              String @id @default(uuid())
+  id              String   @id @default(uuid())
   userId          String
-  user            User   @relation(fields: [userId], references: [id])
+  user            User     @relation(fields: [userId], references: [id])
   category        String
   spent           Float
   spending_limit  Float
@@ -77,13 +77,14 @@ model Budget {
 }
 
 model Pot {
-  id          String @id @default(uuid())
+  id          String   @id @default(uuid())
   userId      String
-  user        User   @relation(fields: [userId], references: [id])
+  user        User     @relation(fields: [userId], references: [id])
   name        String
   target      Float
   total       Float
   hex         String
   theme       String
-  progressBar String @default("0%")
+  progressBar String   @default("0%")
+  createdAt   DateTime @default(now())
 }

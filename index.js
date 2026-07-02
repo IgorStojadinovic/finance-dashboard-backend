@@ -45,18 +45,12 @@ app.use(
     })
 );
 
-// Test connection to database
-async function testConnection() {
-    try {
-        await prisma.$queryRaw`SELECT 1`;
-        console.log("Database connection successful");
-    } catch (error) {
-        console.error("Database connection failed:", error);
-        process.exit(1);
-    }
+// Test connection only in development (not in serverless)
+if (process.env.NODE_ENV === 'development') {
+    prisma.$queryRaw`SELECT 1`
+        .then(() => console.log("Database connection successful"))
+        .catch((error) => console.error("Database connection failed:", error));
 }
-
-testConnection();
 app.use(express.static(path.join(__dirname, "public")));
 // Rute
 app.use("/api/transactions", transactionRoutes);
@@ -82,9 +76,12 @@ app.all("*", (req, res) => {
     }
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-});
+// Only start server locally (not in Vercel serverless)
+if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
+    const PORT = process.env.PORT || 3000;
+    app.listen(PORT, () => {
+        console.log(`Server is running on port ${PORT}`);
+    });
+}
 
 module.exports = app;

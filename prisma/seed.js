@@ -16,11 +16,11 @@ async function main() {
     });
 
     // Kreiraj TestUser korisnika
-    const password2 = await bcrypt.hash("JohnDoe84266+", 10);
+    const password2 = await bcrypt.hash("Test1234", 10);
     const user2 = await prisma.user.create({
         data: {
-            name: "TestUser",
-            email: "Testuser@gmail.com",
+            name: "John Doe",
+            email: "exampleuser@example.com",
             password: password2,
         },
     });
@@ -305,6 +305,7 @@ async function main() {
                 hex: "#F2CDAC",
                 spending_limit: 350.0,
                 progressBar: `${(300.0 / 350.0) * 100}%`,
+                createdAt: new Date("2025-01-05"),
                 latest_spending: [
                     {
                         name: "Grocery Store",
@@ -343,6 +344,7 @@ async function main() {
                 hex: "#277C78",
                 spending_limit: 190.0,
                 progressBar: `${(150.0 / 190.0) * 100}%`,
+                createdAt: new Date("2025-01-08"),
                 latest_spending: [
                     {
                         name: "Movie Night",
@@ -381,6 +383,7 @@ async function main() {
                 hex: "#626070",
                 spending_limit: 280.0,
                 progressBar: `${(200.0 / 280.0) * 100}%`,
+                createdAt: new Date("2025-01-10"),
                 latest_spending: [
                     {
                         name: "Electricity Bill",
@@ -419,6 +422,7 @@ async function main() {
                 hex: "#93674F",
                 spending_limit: 150.0,
                 progressBar: `${(75.0 / 150.0) * 100}%`,
+                createdAt: new Date("2025-01-12"),
                 latest_spending: [
                     {
                         name: "Taxi Ride",
@@ -457,6 +461,7 @@ async function main() {
                 hex: "#82C9D7",
                 spending_limit: 600.0,
                 progressBar: `${(500 / 600) * 100}%`,
+                createdAt: new Date("2025-01-14"),
                 latest_spending: [
                     {
                         name: "Saving for a new car",
