@@ -1,41 +1,25 @@
 require("dotenv").config();
 const { PrismaClient } = require("@prisma/client");
-const { PrismaNeon } = require("@prisma/adapter-neon");
-const { neonConfig } = require("@neondatabase/serverless");
+const { PrismaPg } = require("@prisma/adapter-pg");
 const bcrypt = require("bcryptjs");
-const ws = require("ws");
 
-neonConfig.webSocketConstructor = ws;
-const adminPassword = process.env.ADMIN_PASSWORD;
-
-const adapter = new PrismaNeon({ connectionString: process.env.DATABASE_URL });
+const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
 const prisma = new PrismaClient({ adapter });
 
 async function main() {
-    // Prvo kreiraj korisnika bez relacija
-    const password1 = await bcrypt.hash(adminPassword, 10);
-    const user1 = await prisma.user.create({
+    const password = await bcrypt.hash("test1234", 10);
+    const user = await prisma.user.create({
         data: {
-            name: "Admin",
-            email: "admin@example.com",
-            password: password1,
-        },
-    });
-
-    // Kreiraj TestUser korisnika
-    const password2 = await bcrypt.hash("Test1234", 10);
-    const user2 = await prisma.user.create({
-        data: {
-            name: "John Doe",
-            email: "exampleuser@example.com",
-            password: password2,
+            name: "Test User",
+            email: "test@example.com",
+            password,
         },
     });
 
   await prisma.transaction.createMany({
     data: [
       {
-        userId: user2.id,
+        userId: user.id,
         name: "Emma Richardson",
         amount: 50.75,
         date: new Date("2025-01-05"),
@@ -45,7 +29,7 @@ async function main() {
         image: "/assets/avatars/emma-richardson.jpg",
       },
       {
-        userId: user2.id,
+        userId: user.id,
         name: "Savory Bites Bristo",
         amount: 1200.0,
         date: new Date("2025-02-10"),
@@ -55,7 +39,7 @@ async function main() {
         image: "/assets/avatars/savory-bites-bistro.jpg",
       },
       {
-        userId: user2.id,
+        userId: user.id,
         name: "Daniel Carter",
         amount: 35.0,
         date: new Date("2025-03-15"),
@@ -65,7 +49,7 @@ async function main() {
         image: "/assets/avatars/daniel-carter.jpg",
       },
       {
-        userId: user2.id,
+        userId: user.id,
         name: "Sun Park",
         amount: 10,
         date: new Date("2025-04-20"),
@@ -75,7 +59,7 @@ async function main() {
         image: "/assets/avatars/sun-park.jpg",
       },
       {
-        userId: user2.id,
+        userId: user.id,
         name: "Urban Service",
         amount: 10,
         date: new Date("2025-05-25"),
@@ -85,7 +69,7 @@ async function main() {
         image: "/assets/avatars/urban-services-hub.jpg",
       },
       {
-        userId: user2.id,
+        userId: user.id,
         name: "Aqua Flow Utility",
         amount: 10,
         date: new Date("2025-06-30"),
@@ -95,7 +79,7 @@ async function main() {
         image: "/assets/avatars/aqua-flow-utilities.jpg",
       },
       {
-        userId: user2.id,
+        userId: user.id,
         name: "Buzz Marketing",
         amount: 2569,
         date: new Date("2025-07-05"),
@@ -105,7 +89,7 @@ async function main() {
         image: "/assets/avatars/buzz-marketing-group.jpg",
       },
       {
-        userId: user2.id,
+        userId: user.id,
         name: "Bytewise",
         amount: 56,
         date: new Date("2025-08-10"),
@@ -115,7 +99,7 @@ async function main() {
         image: "/assets/avatars/bytewise.jpg",
       },
       {
-        userId: user2.id,
+        userId: user.id,
         name: "Eco-Fuel Energy",
         amount: 450,
         date: new Date("2025-09-15"),
@@ -125,7 +109,7 @@ async function main() {
         image: "/assets/avatars/ecofuel-energy.jpg",
       },
       {
-        userId: user2.id,
+        userId: user.id,
         name: "Elevate education",
         amount: 25,
         date: new Date("2025-10-20"),
@@ -135,7 +119,7 @@ async function main() {
         image: "/assets/avatars/elevate-education.jpg",
       },
       {
-        userId: user2.id,
+        userId: user.id,
         name: "Ella Phillips",
         amount: 54,
         date: new Date("2025-11-25"),
@@ -145,7 +129,7 @@ async function main() {
         image: "/assets/avatars/ella-phillips.jpg",
       },
       {
-        userId: user2.id,
+        userId: user.id,
         name: "Ethan Clark",
         amount: 10,
         date: new Date("2025-12-30"),
@@ -155,7 +139,7 @@ async function main() {
         image: "/assets/avatars/ethan-clark.jpg",
       },
       {
-        userId: user2.id,
+        userId: user.id,
         name: "Flavor Fiesta",
         amount: 110,
         date: new Date("2025-01-05"),
@@ -165,7 +149,7 @@ async function main() {
         image: "/assets/avatars/flavor-fiesta.jpg",
       },
       {
-        userId: user2.id,
+        userId: user.id,
         name: "Green plate eatery",
         amount: 10,
         date: new Date("2025-02-10"),
@@ -175,7 +159,7 @@ async function main() {
         image: "/assets/avatars/green-plate-eatery.jpg",
       },
       {
-        userId: user2.id,
+        userId: user.id,
         name: "Harper Edwards",
         amount: 65,
         date: new Date("2025-03-15"),
@@ -185,7 +169,7 @@ async function main() {
         image: "/assets/avatars/harper-edwards.jpg",
       },
       {
-        userId: user2.id,
+        userId: user.id,
         name: "James Thompson",
         amount: 35,
         date: new Date("2025-04-20"),
@@ -195,7 +179,7 @@ async function main() {
         image: "/assets/avatars/james-thompson.jpg",
       },
       {
-        userId: user2.id,
+        userId: user.id,
         name: "Liam Hughes",
         amount: 45,
         date: new Date("2025-05-25"),
@@ -205,7 +189,7 @@ async function main() {
         image: "/assets/avatars/liam-hughes.jpg",
       },
       {
-        userId: user2.id,
+        userId: user.id,
         name: "Delta Taxi",
         amount: 10,
         date: new Date("2025-06-30"),
@@ -215,7 +199,7 @@ async function main() {
         image: "/assets/avatars/swift-ride-share.jpg",
       },
       {
-        userId: user2.id,
+        userId: user.id,
         name: "Delta Taxi",
         amount: 25,
         date: new Date("2025-07-05"),
@@ -225,7 +209,7 @@ async function main() {
         image: "/assets/avatars/swift-ride-share.jpg",
       },
       {
-        userId: user2.id,
+        userId: user.id,
         name: "Delta Taxi",
         amount: 5,
         date: new Date("2025-08-10"),
@@ -236,7 +220,7 @@ async function main() {
       },
 
       {
-        userId: user2.id,
+        userId: user.id,
         name: "Delta Taxi",
         amount: 15,
         date: new Date("2025-09-15"),
@@ -246,7 +230,7 @@ async function main() {
         image: "/assets/avatars/swift-ride-share.jpg",
       },
       {
-        userId: user2.id,
+        userId: user.id,
         name: "Delta Taxi",
         amount: 5,
         date: new Date("2025-10-20"),
@@ -261,7 +245,7 @@ async function main() {
   await prisma.pot.createMany({
     data: [
       {
-        userId: user2.id,
+        userId: user.id,
         name: "Vacation Fund",
         target: 2000.0,
         total: 500.0,
@@ -270,7 +254,7 @@ async function main() {
         progressBar: `${Math.min(100, (500.0 / 2000.0) * 100)}%`,
       },
       {
-        userId: user2.id,
+        userId: user.id,
         name: "Emergency Fund",
         target: 5000.0,
         total: 1500.0,
@@ -279,7 +263,7 @@ async function main() {
         progressBar: `${Math.min(100, (1500.0 / 5000.0) * 100)}%`,
       },
       {
-        userId: user2.id,
+        userId: user.id,
         name: "New Car",
         target: 15000.0,
         total: 3000.0,
@@ -288,7 +272,7 @@ async function main() {
         progressBar: `${Math.min(100, (3000.0 / 15000.0) * 100)}%`,
       },
       {
-        userId: user2.id,
+        userId: user.id,
         name: "Home Renovation",
         target: 10000.0,
         total: 2500.0,
@@ -303,7 +287,7 @@ async function main() {
     await prisma.budget.createMany({
         data: [
             {
-                userId: user2.id,
+                userId: user.id,
                 category: "Food",
                 spent: 300.0,
                 theme: "yellow",
@@ -342,7 +326,7 @@ async function main() {
                 ],
             },
             {
-                userId: user2.id,
+                userId: user.id,
                 category: "Entertainment",
                 spent: 150.0,
                 theme: "green",
@@ -381,7 +365,7 @@ async function main() {
                 ],
             },
             {
-                userId: user2.id,
+                userId: user.id,
                 category: "Utilities",
                 spent: 200.0,
                 theme: "navy",
@@ -420,7 +404,7 @@ async function main() {
                 ],
             },
             {
-                userId: user2.id,
+                userId: user.id,
                 category: "Transport",
                 spent: 75.0,
                 theme: "brown",
@@ -459,7 +443,7 @@ async function main() {
                 ],
             },
             {
-                userId: user2.id,
+                userId: user.id,
                 category: "Savings",
                 spent: 500.0,
                 theme: "cayan",
@@ -485,7 +469,7 @@ async function main() {
   await prisma.recurringBill.createMany({
     data: [
       {
-        userId: user2.id,
+        userId: user.id,
         name: "Netflix Subscription",
         category: "Entertainment",
         amount: 15.99,
@@ -495,7 +479,7 @@ async function main() {
         color: "#82C9D7",
       },
       {
-        userId: user2.id,
+        userId: user.id,
         name: "Saving for a new car",
         category: "Savings",
         amount: 1000.0,
@@ -505,7 +489,7 @@ async function main() {
         color: "#277C78",
       },
       {
-        userId: user2.id,
+        userId: user.id,
         name: "Internet Bill",
         category: "Utilities",
         amount: 45.0,
@@ -515,7 +499,7 @@ async function main() {
         color: "#626070",
       },
       {
-        userId: user2.id,
+        userId: user.id,
         name: "Spotify Subscription",
         category: "Entertainment",
         amount: 9.99,
@@ -525,7 +509,7 @@ async function main() {
         color: "#277C78",
       },
       {
-        userId: user2.id,
+        userId: user.id,
         name: "Water Bill",
         category: "Utilities",
         amount: 30.0,
@@ -535,7 +519,7 @@ async function main() {
         color: "#626070",
       },
       {
-        userId: user2.id,
+        userId: user.id,
         name: "Electricity Bill",
         category: "Utilities",
         amount: 60.0,
@@ -550,16 +534,16 @@ async function main() {
   const result = await prisma.$queryRaw`
     SELECT COALESCE(SUM(amount), 0) as total_expenses
     FROM (
-      SELECT amount FROM "Transaction" WHERE "userId" = ${user2.id}
+      SELECT amount FROM "Transaction" WHERE "userId" = ${user.id}
       UNION ALL
-      SELECT amount FROM "RecurringBill" WHERE "userId" = ${user2.id}
+      SELECT amount FROM "RecurringBill" WHERE "userId" = ${user.id}
     ) combined_expenses
   `;
 
   const totalExpenses = result[0]?.total_expenses || 0;
   await prisma.balance.create({
     data: {
-      userId: user2.id,
+      userId: user.id,
       balance: 8505.0,
       income: 2590.0,
       expenses: totalExpenses,

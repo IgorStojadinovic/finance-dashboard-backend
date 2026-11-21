@@ -15,9 +15,11 @@ const app = express();
 app.use(express.json());
 
 const allowedOrigins = [
-  "http://localhost:5173", // Vite development
-  "https://finance-dashboard-psi-sand.vercel.app",
-  "https://finance-dashboard-n7ab.onrender.com",
+  "http://localhost:5173",
+  ...String(process.env.FRONTEND_URL || "")
+    .split(",")
+    .map((origin) => origin.trim())
+    .filter(Boolean),
 ];
 
 // Basic CORS configuration
@@ -80,7 +82,7 @@ app.all("*", (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
+app.listen(PORT, "0.0.0.0", () => {
     console.log(`Server is running on port ${PORT}`);
 });
 
